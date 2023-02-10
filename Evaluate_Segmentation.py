@@ -1,4 +1,6 @@
 import csv
+import os
+import matplotlib.pyplot as plt
 import progressbar
 import torch
 import json
@@ -31,17 +33,22 @@ def evaluate(height, width, patient_file, save_path):
     model.eval()
     for_csv = []
     image_transformer = Seg_Transforms(height, width).transformImgOnly()
+    GT_list = ["A", "B", "C", "D"]
+    # os.makedirs("./Sample_Segmentations", exist_ok=True)
     for set in sets:
         list = sets[set]
-        pb = progressbar.ProgressBar(max_value=len(list))
+        pb = progressbar.ProgressBar(maxval=len(list))
         total_class1dice = 0
         total_class2dice = 0
         number = 0
         count = 0
         print("Running for " + set + "...")
+        pb.start()
         for entry in list:
-            id = entry["id"]
-            gt = entry["GT"]
+            id = entry["pn"]
+            label = entry["label"]
+            label_char = GT_list[np.argmax(label)]
+            gt = label_char
             img = cv2.imread(entry['image'])
             height_orgin, widh_orgin, d = img.shape
             img = image_transformer(img)
@@ -72,8 +79,15 @@ def evaluate(height, width, patient_file, save_path):
             for_csv.append(temp_dict)
             pb.update(count)
             count += 1
+            #Uncomment below to save segmentations to folder.
+            #os.makedirs("./Sample_Segmentations/" + str(id), exist_ok=True)
+            #plt.imsave("./Sample_Segmentations/"+str(id)+str(entry["image"][6:-10])+"_segmented.png", seg)
     keys = for_csv[0].keys()
 
+    with open(save_path+"Segmentation_Results_Final.csv", "w", newline="") as csv_file:
+        dict_writer = csv.DictWriter(csv_file, keys)
+        dict_writer.writeheader()
+        dict_writer.writerows(for_csv)
     with open(save_path+"Segmentation_Results_Final.csv", "w", newline="") as csv_file:
         dict_writer = csv.DictWriter(csv_file, keys)
         dict_writer.writeheader()
