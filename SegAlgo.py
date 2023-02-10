@@ -13,7 +13,7 @@ class Model_Definition():
         output: default = 3. Set this to be the number of pixel classes you want to segment
 
     """
-    def __init__(self, pretrained = True, input = 256, output = 10):
+    def __init__(self, pretrained = True, input = 256, output = 3):
         self.pretrained = pretrained
         self.input = input
         self.output = output
