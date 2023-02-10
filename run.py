@@ -46,20 +46,20 @@ tr_height = 500
 test_width = 1000
 test_height = 1000
 
-batchSize = 16
+batchSize = 4
 num_iters = 1000
 
 if __name__ == '__main__':
     # training and validation directory containing the sample files with images and seg masks
-    train_valid_dir = ""
+    train_valid_dir = "./jpeg_segmentations"
 
     # change this to the name of the file you want to save the segmentation model to
-    os.makedirs(".Models/Testing", exist_ok=True)
+    os.makedirs("./Models/Testing", exist_ok=True)
     save_path = "./Models/Testing"
 
     # This json file should contain "Folds" or sets of patients in the order of "Train, Validation, Test"
     # This allows later functions to properly split the patients into their respective set
-    with open("./Segmentation_Folds.json", "r") as g:
+    with open("./data_dictionaries/Segmentation_Folds.json", "r") as g:
         json_file = json.load(g)
 
     # This is the name of the set within the read json file i.e. CV1, CV2, etc.
@@ -71,10 +71,11 @@ if __name__ == '__main__':
                              valid_dir=train_valid_dir, save_path=save_path)
 
     # This is the evaluation file, a list of paths to patient images
-    with open("./Models/Segmentation_Final.json", "r") as g:
+    with open("./data_dictionaries/data_dict.json", "r") as g:
         patient_file = json.load(g)
 
     # Start evaluation procedure by calling evaluate from Evaluate_Segmentation passing the necessary information
     Evaluate_Segmentation.evaluate(height=test_height,
                                    width=test_width, patient_file=patient_file,
                                    save_path=save_path)
+
