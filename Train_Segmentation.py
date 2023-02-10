@@ -23,7 +23,7 @@ def train(pretrained, num_iters, height, width, batch_size, pat_list, train_dir,
     modelDef = Model_Definition(pretrained = pretrained)
     model = modelDef.segmentationModel()
     model.to(device)
-    optimizer = torch.optim.SGD(params=model.parameters(), lr=0.1, momentum=0.9)
+    optimizer = torch.optim.SGD(params=model.parameters(), lr=0.001, momentum=0.9)
     loss_fn = torch.nn.CrossEntropyLoss()
     loss_counter = 0
     best_iter = 0
