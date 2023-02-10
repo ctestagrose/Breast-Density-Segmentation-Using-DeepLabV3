@@ -40,13 +40,13 @@ class Read_Images():
         view_idx = np.random.randint(0, len(views))
         view_dir = sample_dir + "/" + views[view_idx]
         for item in os.listdir(view_dir):
-            if "seg" in item:
+            if "breast" in item:
                 class1 = cv2.imread(sample_dir + "/" + views[view_idx] + "/" + item)
                 class1 = cv2.cvtColor(class1, cv2.COLOR_BGR2GRAY)
-            if "seg2" in item:
+            if "dense" in item:
                 class2 = cv2.imread(sample_dir + "/" + views[view_idx] + "/" + item)
                 class2 = cv2.cvtColor(class2, cv2.COLOR_BGR2GRAY)
-            if "seg" not in item and "seg2" not in item:
+            if "breast" not in item and "dense" not in item:
                 Img = cv2.imread(sample_dir + "/" + views[view_idx] + "/" + item)
         AnnMap = np.zeros(Img.shape[0:2], np.float32)
         if class1 is not None:  AnnMap[class1 == 255] = 1
@@ -70,13 +70,13 @@ class Read_Images():
         val_view_idx = np.random.randint(0, len(val_views))
         val_view_dir = val_sample_dir + "/" + val_views[val_view_idx]
         for item in os.listdir(val_view_dir):
-            if "seg" in item:
+            if "breast" in item:
                 class1 = cv2.imread(val_sample_dir + "/" + val_views[val_view_idx] + "/" + item)
                 class1 = cv2.cvtColor(class1, cv2.COLOR_BGR2GRAY)
-            if "seg2" in item:
+            if "dense" in item:
                 class2 = cv2.imread(val_sample_dir + "/" + val_views[val_view_idx] + "/" + item)
                 class2 = cv2.cvtColor(class2, cv2.COLOR_BGR2GRAY)
-            if "seg" not in item and "seg2" not in item:
+            if "breast" not in item and "dense" not in item:
                 Img = cv2.imread(val_sample_dir + "/" + val_views[val_view_idx] + "/" + item)
         AnnMap = np.zeros(Img.shape[0:2], np.float32)
         if class1 is not None:  AnnMap[class1 == 255] = 1
